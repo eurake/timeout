@@ -12,7 +12,7 @@ type TimeoutMap struct {
 	mutex           sync.Mutex
 	cleanupTickTime time.Duration
 	container       map[interface{}]*element
-	clearner        *time.Ticker
+	cleaner         *time.Ticker
 	cleanerStopChan chan bool
 }
 
@@ -27,12 +27,12 @@ func New(cleanupTickTime time.Duration) *TimeoutMap {
 		container:       make(map[interface{}]*element),
 		cleanerStopChan: make(chan bool),
 	}
-	tm.clearner = time.NewTicker(cleanupTickTime)
+	tm.cleaner = time.NewTicker(cleanupTickTime)
 
 	go func() {
 		for {
 			select {
-			case <-tm.clearner.C:
+			case <-tm.cleaner.C:
 				tm.cleanUp()
 			case <-tm.cleanerStopChan:
 				break

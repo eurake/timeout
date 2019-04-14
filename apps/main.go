@@ -3,11 +3,13 @@ package main
 import (
 	"log"
 	"time"
+
+	"github.com/eurake/timeout"
 )
 
 func main() {
 
-	tm := timedmap.New(1 * time.Second)
+	tm := timeout.New(1 * time.Second)
 
 	tm.Set("hey", 213, 3*time.Second, func(v interface{}) {
 		log.Println("key-value pair of 'hey' has expired")
@@ -18,8 +20,8 @@ func main() {
 	printKeyVal(tm, "hey")
 }
 
-func printKeyVal(tm *timedmap.TimedMap, key interface{}) {
-	d := tm.GetValue(key)
+func printKeyVal(tm *timeout.TimeoutMap, key interface{}) {
+	d := tm.Get(key)
 	if d == nil {
 		log.Println("data expired")
 		return
